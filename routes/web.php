@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FrontpageController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
+
+//Frontpage
+Route::get('/', [App\Http\Controllers\FrontpageController::class, 'index'])->name('frontpage');
+
+//Dashboard
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('index.dashboard');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
