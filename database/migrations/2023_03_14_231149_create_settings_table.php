@@ -17,7 +17,7 @@ class CreateSettingsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('value')->nullable();
-            $table->foreignId('admin_id')->constrained();
+            //$table->foreignId('admin_id')->constrained();
             $table->timestamps();
 
         });
