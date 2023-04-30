@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontpageController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,12 +16,23 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Auth::routes();
+//Auth::routes();
 
 //Frontpage
-Route::get('/', [App\Http\Controllers\FrontpageController::class, 'index'])->name('frontpage');
 
-//Dashboard
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('index.dashboard');
+Route::group(['middleware'=>'stay.auth'], function(){
+    Route::get('/', [FrontpageController::class, 'index'])->name('frontpage.index');
+    Route::post('/', [FrontpageController::class, 'postLogin'])->name('frontpage.login');
+});
+//Admin
+Route::group(['prefix'=>'admin', 'middleware'=>'auth'], function(){
+    Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard.index');
+    Route::get('/users', function () {return view('v1.admin.user'); })->name('users.index');
+    Route::get('/users-create', [UserController::class, 'create'])->name('users.create');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::get('logout', [UserController::class, 'logoutUser'])->name('logout.logout');
+});
+
+
+
